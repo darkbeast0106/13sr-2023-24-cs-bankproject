@@ -1,10 +1,29 @@
-﻿namespace BankProject
+﻿using System.Diagnostics.Tracing;
+
+namespace BankProject
 {
     /// <summary>
     /// Bank műveleteit végrehajtó osztály.
     /// </summary>
     public class Bank
     {
+        private class Szamla
+        {
+            public Szamla(string nev, string szamlaszam)
+            {
+                Nev = nev;
+                Szamlaszam = szamlaszam;
+                Egyenleg = 0;
+            }
+
+            public string Nev { get; set; }
+            public string Szamlaszam { get; set; }
+            public ulong Egyenleg { get; set; }
+
+        }
+
+        private List<Szamla> szamlak = new List<Szamla>();
+        
         /// <summary>
         /// Új számlát nyit a megadott névvel, számlaszámmal, 0 Ft egyenleggel
         /// </summary>
@@ -16,7 +35,36 @@
         /// A számlaszám számot, szóközt és kötőjelet tartalmazhat</exception>
         public void UjSzamla(string nev, string szamlaszam)
         {
-            throw new NotImplementedException();
+            if (nev == null)
+            {
+                throw new ArgumentNullException(nameof(nev));
+            }
+            if (szamlaszam == null)
+            {
+                throw new ArgumentNullException(nameof(szamlaszam));
+            }
+            if (nev == "")
+            {
+                throw new ArgumentException("A név nem lehet üres", nameof(nev));
+            }
+            if (szamlaszam == "")
+            {
+                throw new ArgumentException("A számlaszám nem lehet üres", nameof(szamlaszam));
+            }
+
+            int index = 0;
+            while (index < szamlak.Count && szamlak[index].Szamlaszam != szamlaszam)
+            {
+                index++;
+            }
+
+            if (index < szamlak.Count)
+            {
+                throw new ArgumentException("A megadott számlaszámmal létezik számla", nameof(szamlaszam));
+            }
+
+            Szamla szamla = new Szamla(nev, szamlaszam);
+            szamlak.Add(szamla);
         }
 
         /// <summary>
@@ -29,7 +77,7 @@
         /// <exception cref="HibasSzamlaszamException">A megadott számlaszámmal nem létezik számla</exception>
         public ulong Egyenleg(string szamlaszam)
         {
-            throw new NotImplementedException();
+            return 0;
         }
 
         /// <summary>
